@@ -81,6 +81,10 @@ nav .menu span svg:hover {
     opacity: 0.7;
 }
 
+.menu-list.hidden {
+    display: flex !important;
+}
+
 .menu-list {
     position: absolute;
     right: 10px;
@@ -136,12 +140,20 @@ nav .menu span svg:hover {
     margin-right: 10px;
 }
 
-.menu-list ul li span {
+.menu-list ul li:last-child span {
     border-top: 1px solid #333;
     margin-top: 15px;
     padding: 5px 0;
     display: flex;
     align-items: center;
+}
+
+.menu-list ul h2 {
+    padding: 5px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: default;
 }
 
 /* Home */
@@ -222,6 +234,7 @@ nav .menu span svg:hover {
     border: 1px #333 solid;
 }
 
+/* form login */
 .content-login {
     position: fixed;
     top: 0;
@@ -269,67 +282,6 @@ nav .menu span svg:hover {
     font-weight: 400;
 }
 
-.coolinput {
-    display: flex;
-    flex-direction: column;
-    position: static;
-    width: 100%;
-}
-
-.coolinput label.label {
-    font-size: .9rem;
-    color: #333;
-    font-weight: 500;
-    position: relative;
-    top: 0.5rem;
-    margin: 0 0 0 7px;
-    padding: 0 3px;
-    background: #fff;
-    width: fit-content;
-}
-
-.coolinput input.input {
-    height: 40px;
-    padding: 5px 10px;
-    font-size: 0.9rem;
-    border: 1px #333 solid;
-    border-radius: 5px;
-    background: #fff;
-}
-
-.coolinput input.input:focus {
-    outline: none;
-}
-
-.btn-form {
-    margin-top: 1rem;
-    border: 1px #333 solid;
-    border-radius: 5px;
-    background: #333;
-    color: #fff;
-    height: 40px;
-    width: 100%;
-    max-width: 100px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-} 
-
-.btn-form:hover {
-    opacity: 0.7;
-}
-
-.success {
-    margin-top: .5rem;
-    color: green;
-    font-weight: 500;
-}
-
-.error {
-    margin-top: .5rem;
-    color: red;
-    font-weight: 500;
-}
-
 @media (min-width: 768px) {
     form {
         padding: 1rem 2rem 2rem;
@@ -367,5 +319,173 @@ nav .menu span svg:hover {
 
     .home-text a {
         font-size: 16px;
+    }
+}
+
+/* Inputs padrão */
+.coolinput {
+    display: flex;
+    flex-direction: column;
+    position: static;
+    width: 100%;
+}
+
+.coolinput label.label {
+    font-size: .9rem;
+    color: #333;
+    font-weight: 500;
+    position: relative;
+    top: 0.5rem;
+    margin: 0 0 0 7px;
+    padding: 0 3px;
+    background: #fff;
+    width: fit-content;
+}
+
+.coolinput .input {
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border: 1px #333 solid;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.coolinput .input:focus {
+    outline: none;
+}
+
+.btn-form {
+    margin-top: 1rem;
+    border: 1px #333 solid;
+    border-radius: 5px;
+    background: #333;
+    font-size: .95rem;
+    font-weight: 500;
+    color: #fff;
+    height: 40px;
+    width: 100%;
+    max-width: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+} 
+
+.btn-form:hover {
+    opacity: 0.7;
+}
+
+.success {
+    margin-top: .5rem;
+    color: green;
+    font-weight: 500;
+}
+
+.error {
+    margin-top: .5rem;
+    color: red;
+    font-weight: 500;
+}
+
+/* Cadastro de curriculos */
+.content-curriculos {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+}
+
+.curriculo-container {
+    width: 100%;
+    height: 100%;
+    max-width: 1700px;
+    background-color: #fff;
+    padding: 2rem;
+    overflow: auto;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.curriculo-header {
+    margin-bottom: 20px;
+}
+
+.curriculo-header h3 {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+
+.curriculo-header span {
+    font-size: 18px;
+    font-weight: 400;
+    color: #333;
+}
+
+.form-curriculos {
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
+    width: 100%;
+}
+
+.form-curriculos .btn-form {
+    max-width: 180px;
+}
+
+.coolinput select {
+    padding-right: 25px;
+}
+
+.coolinput textarea {
+    max-height: 100px;
+    min-height: 100px;
+    resize: none;
+}
+
+@media (min-width: 768px) {
+    .form-curriculos .coolinput {
+        padding: 0 5px;
+    }
+
+    .form-curriculos .btn-form {
+        margin-left: 5px;
+    }
+    
+    .coolinput.w-75 {
+        width: 75%;
+    }
+    
+    .coolinput.w-66 {
+        width: 66.666%;
+    }
+    
+    .coolinput.w-50 {
+        width: 50%;
+    }
+    
+    .coolinput.w-33 {
+        width: 33.3333%;
+    }
+    
+    .coolinput.w-25 {
+        width: 25%;
+    }
+}
+
+@media (max-width: 500px) {
+    .curriculo-container {
+        padding: 1rem;
+    }
+
+    .curriculo-header h3 {
+        font-size: 20px;
+    }
+
+    .curriculo-header span {
+        font-size: 15px;
+    }
+
+    .form-curriculos .btn-form {
+        max-width: 100%;
     }
 }

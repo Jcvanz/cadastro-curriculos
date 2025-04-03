@@ -38,6 +38,11 @@
             <div class="menu-list hidden" id="menuList">
                 <ul class="menu-list-items">
                     <li>
+                        <span>
+                            <h2>Navegação</h2>
+                        </span>
+                    </li>
+                    <li>
                         <a href="#home" class="links">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -99,6 +104,85 @@
                     <div class="home-image">
                         <img src="/assets/banner_home.png" alt="">
                     </div>
+                </div>
+            </div>
+
+            <!-- Formulário de cadastro | Tela de currículos -->
+            <div class="content-curriculos hidden" id="contentCurriculos">
+                <div class="curriculo-container">
+                    <div class="curriculo-header">
+                        <h3>Cadastrar Currículo</h3>
+                        <span>Preencha os campos abaixo para cadastrar seu currículo</span>
+                    </div>
+                    <form class="form-curriculos" id="curriculoForm">
+
+                        <div class="coolinput w-50">
+                            <label for="name" class="label">Nome</label>
+                            <input type="text" id="inputName" required name="name" class="input">
+                        </div>
+
+                        <div class="coolinput w-50">
+                            <label for="email" class="label">Email</label>
+                            <input type="text" id="inputEmail" required name="email" class="input">
+                        </div>
+
+                        <div class="coolinput w-33">
+                            <label for="cpf" class="label">CPF</label>
+                            <input type="text" id="inputCpf" required name="cpf" class="input">
+                        </div>
+
+                        <div class="coolinput w-33">
+                            <label for="dataNasc" class="label">Data de Nascimento</label>
+                            <input type="text" id="inputDataNasc" required name="dataNasc" class="input">
+                        </div>
+                        
+                        <div class="coolinput w-33">
+                            <label for="sexo" class="label">Sexo</label>
+                            <select id="sexo" class="input" required name="sexo">
+                                <option value="" disabled selected>Selecione o sexo</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Feminino">Feminino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="coolinput w-33">
+                            <label for="estadocivil" class="label">Estado Civil</label>
+                            <select id="inputEstadocivil" required name="estadocivil" class="input">
+                                <option value="" disabled selected>Selecione o sexo</option>
+                                <option value="casado">Casado</option>
+                                <option value="solteiro">Solteiro</option>
+                                <option value="divorciado">Divorciado</option>
+                                <option value="viuvo">Viúvo</option>
+                                <option value="separado">Separado</option>
+                                <option value="uniaoestavel">União Estável</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="coolinput w-66">
+                            <label for="escolaridade" class="label">Escolaridade</label>
+                            <input type="text" id="inputEscolaridade" required name="escolaridade" class="input">
+                        </div>
+            
+                        <div class="coolinput ">
+                            <label for="cursos" class="label">Cursos/Especializações</label>
+                            <textarea id="cursos" name="cursos" class="input" required></textarea>
+                        </div>
+                        
+                        <div class="coolinput">
+                            <label for="experiencia" class="label">Experiência Profissional</label>
+                            <textarea id="experiencia" name="experiencia" class="input" required></textarea>
+                        </div>
+                        
+                        <div class="coolinput">
+                            <label for="pretensao_salarial" class="label">Pretenção Salarial</label>
+                            <input type="text" id="pretensao_salarial" required name="pretensao_salarial" class="input">
+                        </div>
+
+                        <button type="submit" class="btn-form">Salvar Currículo</button>
+                        <p id="curriculoMsg"></p>
+                    </form>
                 </div>
             </div>
 

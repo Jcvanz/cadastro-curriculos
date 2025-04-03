@@ -99,13 +99,18 @@ if (userId) {
 
         const hash = window.location.hash;
         
+        const curriculoFormContent = document.getElementById('contentCurriculos');
         const homeContent = document.getElementById('home');
 
+        curriculoFormContent.classList.add('hidden');
         homeContent.classList.add('hidden');
 
         switch (hash) {
             case '#home':
                 homeContent.classList.remove('hidden');
+                break;
+            case '#curriculos':
+                curriculoFormContent.classList.remove('hidden');
                 break;
             default:
                 homeContent.classList.remove('hidden');
@@ -121,3 +126,48 @@ if (userId) {
         RenderPage();
     });
 }
+
+document.getElementById('curriculoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const cpf = document.getElementById('cpf').value;
+    if (!validarCPF(cpf)) {
+        alert('CPF inválido!');
+        return;
+    }
+
+    const dataBr = document.getElementById('dataNasc').value;
+    const dataParts = dataBr.split('/');
+    const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
+
+    const body = {
+        name: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        login: document.getElementById('loginCadastro').value,
+        password: document.getElementById('senhaCadastro').value,
+        cpf,
+        dataNasc: dataFormatada,
+        sexo: document.getElementById('sexo').value,
+        estadocivil: document.getElementById('estadocivil').value,
+        escolaridade: document.getElementById('escolaridade').value,
+        cursos: document.getElementById('cursos').value,
+        experiencia: document.getElementById('experiencia').value,
+        pretensao_salarial: document.getElementById('pretensao_salarial').value
+    };
+
+    // TODO: Validar login duplicado no backend antes de cadastrar
+    const res = await fetch('http://localhost:3000/curriculos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    });
+
+    const msg = document.getElementById('curriculoMsg');
+    if (res.ok) {
+        msg.textContent = 'Currículo salvo com sucesso!';
+        msg.className = 'success';
+    } else {
+        msg.textContent = 'Erro ao salvar o currículo.';
+        msg.className = 'error';
+    }
+});
