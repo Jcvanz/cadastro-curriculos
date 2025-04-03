@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <title>Cadastro de Currículos</title>
+</head>
+
+<body>
+    <div class="root">
+        <header>
+            <nav>
+                <div class="logo">
+                    <h2>Cadastro de Currículos</h2>
+                </div>
+                <div class="menu">
+                    <span class="menu-icon" id="menuIcon" title="Menu" aria-label="Menu">
+                        <svg id="openIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-menu">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                        <svg id="closeIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </span>
+                </div>
+            </nav>
+            <div class="menu-list hidden" id="menuList">
+                <ul class="menu-list-items">
+                    <li>
+                        <a href="#home" class="links">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-house-icon lucide-house">
+                                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                                <path
+                                    d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            </svg>
+                            <p>Home</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#curriculos" class="links">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-notebook-text-icon lucide-notebook-text">
+                                <path d="M2 6h4" />
+                                <path d="M2 10h4" />
+                                <path d="M2 14h4" />
+                                <path d="M2 18h4" />
+                                <rect width="16" height="20" x="4" y="2" rx="2" />
+                                <path d="M9.5 8h5" />
+                                <path d="M9.5 12H16" />
+                                <path d="M9.5 16H14" />
+                            </svg>
+                            <p>Currículos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <span onclick="logout()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-log-out-icon lucide-log-out">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" x2="9" y1="12" y2="12" />
+                            </svg>
+                            <p>Sair</p>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <main>
+            <!-- Home -->
+            <div class="home" id="home">
+                <div class="home-container">
+                    <div class="home-text">
+                        <h2>Bem-vindo ao sistema de cadastro de currículos!</h2>
+                        <p>
+                            Cadastre seu currículo de forma simples e rápida!
+                            <br>
+                            Basta clicar no botão abaixo e preencher os campos necessários.
+                            <br>
+                            Após o cadastro, você poderá visualizar e editar seu currículo a qualquer momento.
+                        </p>
+                        <a href="#curriculos" class="links">Cadastrar Currículo</a>
+                    </div>
+                    <div class="home-image">
+                        <img src="/assets/banner_home.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário de login -->
+            <div class="content-login hidden" id="contentLogin">
+                <div class="login-container">
+                    <div class="login-header">
+                        <h3>Olá, seja bem-vindo!</h3>
+                        <span>Faça login para continuar</span>
+                    </div>
+                    <form id="loginForm">
+                        <div class="coolinput">
+                            <label for="email" class="label">Email</label>
+                            <input type="text" id="inputLogin" required name="email" class="input">
+                        </div>
+                        <div class="coolinput">
+                            <label for="password" class="label">Senha</label>
+                            <input type="password" id="inputPassword"  required name="password" class="input">
+                        </div>
+                        <p id="loginMessage"></p>
+                        <button type="submit" class="btn-form">Entrar</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/scripts/script.js"></script>
+</body>
+
+</html>

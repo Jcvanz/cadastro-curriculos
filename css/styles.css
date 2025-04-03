@@ -1,0 +1,371 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: initial;
+}
+
+input:-webkit-autofill {
+    background-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important; 
+}
+
+.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    display: none !important;
+}
+
+.root {
+    min-height: 100vh;
+    width: 100%;
+    background-color: #ececec;
+}
+
+main {
+    height: calc(100vh - 80px);
+    width: 100%;
+    max-height: 800px;
+    overflow: hidden;
+}
+
+header {
+    width: 100%;
+    height: 80px;
+    padding: 5px 30px;
+    background-color: #ffffff;
+    position: relative;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.168));
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+}
+
+nav .logo h2 {
+    font-size: 25px;
+    color: initial;
+}
+
+nav .menu span {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav .menu span svg {
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+    position: absolute;
+}
+
+nav .menu span svg:hover {
+    opacity: 0.7;
+}
+
+.menu-list {
+    position: absolute;
+    right: 10px;
+    top: 80px;
+    width: 200px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.168));
+    transition: all 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0px);
+    z-index: 10;
+}
+
+.menu-list.hidden {
+    transform: translateY(-40px);
+}
+
+.menu-list ul {
+    list-style: none;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-list ul li a,
+.menu-list ul li p {
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+    letter-spacing: .75px;
+    transition: all 0.3s ease;
+}
+
+.menu-list ul li a {
+    display: flex;
+    align-items: center;
+}
+
+.menu-list ul li a:hover,
+.menu-list ul li p:hover {
+    opacity: 0.7;
+}
+
+.menu-list ul li svg {
+    color: #333;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.menu-list ul li span {
+    border-top: 1px solid #333;
+    margin-top: 15px;
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Home */
+.home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home .home-container {
+    width: 100%;
+    max-width: 1700px;
+    padding: 0 30px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home .home-image {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home .home-image img {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+}
+
+.home-text {
+    height: 100%;
+    width: 50%;
+    max-width: 650px;
+    padding: 40px;
+    
+}
+
+.home-text h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    line-height: 40px;
+    margin: 70px 0 30px;
+}
+
+.home-text p {
+    font-size: 20px;
+    color: #333;
+    line-height: 30px;
+    margin-bottom: 30px;
+}
+
+.home-text a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    transition: all 0.7s ease;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 250px;
+}
+
+.home-text a:hover {
+    background-color: #fff;
+    color: #333;
+    border: 1px #333 solid;
+}
+
+.content-login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.701);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container .login-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.login-container .login-header h3 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.login-container .login-header span {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.coolinput {
+    display: flex;
+    flex-direction: column;
+    position: static;
+    width: 100%;
+}
+
+.coolinput label.label {
+    font-size: .9rem;
+    color: #333;
+    font-weight: 500;
+    position: relative;
+    top: 0.5rem;
+    margin: 0 0 0 7px;
+    padding: 0 3px;
+    background: #fff;
+    width: fit-content;
+}
+
+.coolinput input.input {
+    height: 40px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border: 1px #333 solid;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.coolinput input.input:focus {
+    outline: none;
+}
+
+.btn-form {
+    margin-top: 1rem;
+    border: 1px #333 solid;
+    border-radius: 5px;
+    background: #333;
+    color: #fff;
+    height: 40px;
+    width: 100%;
+    max-width: 100px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+} 
+
+.btn-form:hover {
+    opacity: 0.7;
+}
+
+.success {
+    margin-top: .5rem;
+    color: green;
+    font-weight: 500;
+}
+
+.error {
+    margin-top: .5rem;
+    color: red;
+    font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    form {
+        padding: 1rem 2rem 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .home .home-container .home-text {
+        width: 100%;
+    }
+
+    .home .home-container .home-image {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .home .home-container {
+        padding: 0 20px;
+    }
+
+    .home-text {
+        padding: 0px;
+    }
+
+    .home-text h2 {
+        font-size: 30px;
+        line-height: 30px;
+    }
+
+    .home-text p {
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .home-text a {
+        font-size: 16px;
+    }
+}
