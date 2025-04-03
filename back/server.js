@@ -23,6 +23,24 @@ app.get('/users', (req, res) => {
     })
 });
 
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    database.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results) => {
+        if (error) {
+            return res.status(500).send(error);
+        }
+
+        if(results.length === 0) {
+            return res.status(401).json({ message: 'Email ou senha incorretos' });
+        }
+        
+        res.json({
+            message: 'Login realizado com sucesso',
+            user: results[0]
+        });
+    });
+});
+
 app.post('/users', (req, res) => {
     const { name, email, password } = req.body;
     database.query('INSERT INTO users (name, email, password) VALUES (?,?,?)', [name, email, password], (error, results) => {
