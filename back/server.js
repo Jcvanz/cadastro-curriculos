@@ -42,16 +42,26 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-    const { name, email, password } = req.body;
-    database.query('INSERT INTO users (name, email, password) VALUES (?,?,?)', [name, email, password], (error, results) => {
-        if (error) {
-            return res.status(500).send(error);
+    const { name, email, password, isrecruiter } = req.body;
+    database.query('INSERT INTO users (name, email, password, isrecruiter) VALUES (?, ?, ?, ?)',
+        [name, email, password, isrecruiter], 
+        (error, results) => {
+            if (error) {
+                console.error('Erro ao cadastrar usuário:', error); 
+                return res.status(500).send(error);
+            }
+
+            res.json({
+                message: 'Usuário criado',
+                user: {
+                    id: results.insertId,
+                    name,
+                    email,
+                    isrecruiter
+                }
+            });
         }
-        res.json({
-            message: 'Usuário criado',
-            id: results.insertId
-        });
-    })
+    )
 });
 
 app.put('/users/:id', (req, res) => {

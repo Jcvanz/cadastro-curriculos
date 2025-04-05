@@ -257,29 +257,89 @@ nav .menu span svg:hover {
     max-width: 500px;
     background-color: #fff;
     padding: 2rem;
+    position: relative;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-container .login-header {
+.login-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: .75rem;
     color: #333;
 }
 
-.login-container .login-header h3 {
+.login-header h3 {
     font-size: 25px;
     font-weight: 600;
     margin-bottom: 0.5rem;
     text-align: center;
 }
 
-.login-container .login-header span {
+.login-header span {
     font-size: 15px;
     font-weight: 400;
+}
+
+#registerForm {
+    padding-bottom: 10px;
+}
+
+#loginForm .btn-form,
+#registerForm .btn-form {
+    max-width: 100%;
+    margin: 1rem 0 .5rem;
+}
+
+#loginForm span,
+#registerForm span {
+    font-size: 15px;
+    font-weight: 400;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+#loginForm span a,
+#registerForm span a {
+    text-decoration: underline;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#loginForm span a:hover,
+#registerForm span a:hover {
+    opacity: 0.7;
+}
+
+.register-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    transition: all 0.3s ease;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    height: auto;
+}
+
+.register-container.active {
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
 }
 
 @media (min-width: 768px) {
@@ -347,12 +407,8 @@ nav .menu span svg:hover {
     padding: 5px 10px;
     font-size: 0.9rem;
     border: 1px #333 solid;
-    border-radius: 5px;
+    border-radius: 5px; 
     background: #fff;
-}
-
-.coolinput .input:focus {
-    outline: none;
 }
 
 .btn-form {
@@ -393,6 +449,23 @@ nav .menu span svg:hover {
     width: 100%;
 }
 
+.curriculo-header-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-btns {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-btns button {
+    max-width: 150px;
+}
+
 .curriculo-container {
     width: 100%;
     height: 100%;
@@ -406,6 +479,7 @@ nav .menu span svg:hover {
 
 .curriculo-header {
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .curriculo-header h3 {
@@ -442,12 +516,66 @@ nav .menu span svg:hover {
     resize: none;
 }
 
+.form-curriculos p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.btns-form-content {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+}
+
+.btns-curriculo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+    max-width: 300px;
+    justify-content: end;
+}
+
+.btns-curriculo .deleteCurriculoBtn {
+    background-color: #fe5d5d;
+    color: #fff;
+    border: 1px #fe5d5d solid;
+}
+
+.curriculo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+}
+
+.curriculos-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.curriculos-not-found .btn-form {
+    max-width: 150px;
+}
+
+@media (max-width: 850px) {
+    .curriculo-header-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 @media (min-width: 768px) {
     .form-curriculos .coolinput {
         padding: 0 5px;
     }
 
-    .form-curriculos .btn-form {
+    .form-curriculos .btn-form,
+    .form-curriculos p {
         margin-left: 5px;
     }
     

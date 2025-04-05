@@ -37,11 +37,9 @@
             </nav>
             <div class="menu-list hidden" id="menuList">
                 <ul class="menu-list-items">
-                    <li>
-                        <span>
-                            <h2>Navegação</h2>
-                        </span>
-                    </li>
+                    <span>
+                        <h2>Navegação</h2>
+                    </span>
                     <li>
                         <a href="#home" class="links">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -68,9 +66,10 @@
                                 <path d="M9.5 12H16" />
                                 <path d="M9.5 16H14" />
                             </svg>
-                            <p>Currículos</p>
+                            <p>Meus Currículos</p>
                         </a>
                     </li>
+                    <li class="hidden" id="recruiterOn"></li>
                     <li>
                         <span onclick="logout()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -108,14 +107,45 @@
             </div>
 
             <!-- Formulário de cadastro | Tela de currículos -->
-            <div class="content-curriculos hidden" id="contentCurriculos">
+            <div class="content-curriculos" id="contentCurriculos">
                 <div class="curriculo-container">
-                    <div class="curriculo-header">
-                        <h3>Cadastrar Currículo</h3>
-                        <span>Preencha os campos abaixo para cadastrar seu currículo</span>
+                    <div class="curriculo-header-container" id="curriculoHeader">
+                        <div class="curriculo-header hidden" id="updateCurriculoText">
+                            <h3>Currículos Cadastrados</h3>
+                            <span>
+                                Selecione um currículo para editar ou clique no botão abaixo para cadastrar um novo
+                                currículo
+                            </span>
+                        </div>
+                        <div class="curriculo-header hidden" id="registerCurriculoText">
+                            <h3>Cadastrar Currículo</h3>
+                            <span>Preencha os campos abaixo para cadastrar seu currículo</span>
+                        </div>
+                        <div class="header-btns">
+                            <button onclick="openRegisterCurriculo()" class="btn-form mainBtn">Cadastrar Currículo</button>
+                            <button onclick="openUpdateCurriculo()" class="btn-form mainBtn">Atualizar Currículo</button>
+                        </div>
                     </div>
-                    <form class="form-curriculos" id="curriculoForm">
-
+                    <div class="curriculo-list hidden" id="curriculoList">
+                        <div class="curriculos-not-found hidden" id="curriculoNotFound">
+                            <h3>Nenhum currículo encontrado</h3>
+                            <span>Cadastre um currículo clicando no botão abaixo</span>
+                            <button onclick="openRegisterCurriculo()" class="btn-form">Cadastrar Currículo</button>
+                        </div>
+                    </div>
+                    <template id="curriculoItemTemplate">
+                        <div class="curriculo-item">
+                            <div class="curriculo-item-header">
+                                <h3 class="curriculoName"></h3>
+                                <span class="curriculoDate"></span>
+                            </div>
+                            <div class="btns-curriculo">
+                                <button class="btn-form editCurriculoBtn">Editar</button>
+                                <button class="btn-form deleteCurriculoBtn">Excluir</button>
+                            </div>
+                        </div>
+                    </template>
+                    <form class="form-curriculos hidden" id="curriculoForm">
                         <div class="coolinput w-50">
                             <label for="name" class="label">Nome</label>
                             <input type="text" id="inputName" required name="name" class="input">
@@ -135,7 +165,7 @@
                             <label for="dataNasc" class="label">Data de Nascimento</label>
                             <input type="text" id="inputDataNasc" required name="dataNasc" class="input">
                         </div>
-                        
+
                         <div class="coolinput w-33">
                             <label for="sexo" class="label">Sexo</label>
                             <select id="sexo" class="input" required name="sexo">
@@ -145,7 +175,7 @@
                                 <option value="Outro">Outro</option>
                             </select>
                         </div>
-                        
+
                         <div class="coolinput w-33">
                             <label for="estadocivil" class="label">Estado Civil</label>
                             <select id="inputEstadocivil" required name="estadocivil" class="input">
@@ -164,24 +194,26 @@
                             <label for="escolaridade" class="label">Escolaridade</label>
                             <input type="text" id="inputEscolaridade" required name="escolaridade" class="input">
                         </div>
-            
+
                         <div class="coolinput ">
                             <label for="cursos" class="label">Cursos/Especializações</label>
                             <textarea id="cursos" name="cursos" class="input" required></textarea>
                         </div>
-                        
+
                         <div class="coolinput">
                             <label for="experiencia" class="label">Experiência Profissional</label>
                             <textarea id="experiencia" name="experiencia" class="input" required></textarea>
                         </div>
-                        
+
                         <div class="coolinput">
                             <label for="pretensao_salarial" class="label">Pretenção Salarial</label>
                             <input type="text" id="pretensao_salarial" required name="pretensao_salarial" class="input">
                         </div>
-
-                        <button type="submit" class="btn-form">Salvar Currículo</button>
                         <p id="curriculoMsg"></p>
+                        <div class="btns-form-content">
+                            <button type="submit" class="btn-form">Salvar Currículo</button>
+                            <button type="button" id="returnBtn" onclick="returnToCurriculoList()" class="btn-form hidden">Voltar</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -200,11 +232,47 @@
                         </div>
                         <div class="coolinput">
                             <label for="password" class="label">Senha</label>
-                            <input type="password" id="inputPassword"  required name="password" class="input">
+                            <input type="password" id="inputPassword" required name="password" class="input">
                         </div>
                         <p id="loginMessage"></p>
                         <button type="submit" class="btn-form">Entrar</button>
+                        <span>Ainda nao possui uma conta? <a type="button" onclick="returnToRegister()">Cadastre-se</a></span>
                     </form>
+                    <div class="register-container" id="registerContainer">
+                        <div class="login-header">
+                            <h3>Olá, seja bem-vindo!</h3>
+                            <span>Crie uma conta para continuar</span>
+                        </div>
+                        <form id="registerForm">
+                            <div class="coolinput">
+                                <label for="name" class="label">Nome</label>
+                                <input type="text" id="inputRegisterName" required name="name" class="input">
+                            </div>
+                            <div class="coolinput">
+                                <label for="email" class="label">Email</label>
+                                <input type="text" id="inputRegisterEmail" required name="email" class="input">
+                            </div>
+                            <div class="coolinput">
+                                <label for="password" class="label">Senha</label>
+                                <input type="password" id="inputRegisterPassword" required name="password" class="input">
+                            </div>
+                            <div class="coolinput">
+                                <label for="confirmPassword" class="label">Confirme a Senha</label>
+                                <input type="password" id="inputRegisterPasswordConfirm" required name="confirmPassword" class="input">
+                            </div>
+                            <div class="coolinput">
+                                <label for="inputRegisterIsRecruiter" class="label">Tipo de Usuário</label>
+                                <select id="inputRegisterIsRecruiter" class="input" required name="tipoUsuario">
+                                    <option value="" disabled selected>Selecione o tipo de usuário</option>
+                                    <option value="0">Candidato</option>
+                                    <option value="1">Recrutador</option>
+                                </select>
+                            </div>
+                            <p id="registerMessage"></p>
+                            <button type="submit" class="btn-form">Criar Conta</button>
+                            <span>Já possui uma conta? <a type="button" onclick="returnToLogin()">Entre</a></span>
+                        </form>
+                    </div>
                 </div>
             </div>
         </main>

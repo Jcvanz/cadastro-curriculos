@@ -1,16 +1,99 @@
 const loginForm = document.getElementById('loginForm');
 const loginMessage = document.getElementById('loginMessage');
+const registerForm = document.getElementById('registerForm');
+const registerMessage = document.getElementById('registerMessage');
 const contentLogin = document.getElementById('contentLogin');
 const userId = localStorage.getItem('user_id');
+const userData = JSON.parse(localStorage.getItem('user'));
 
+/* Verificação se o usuário está logado */
 window.onload = () => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+
     if (userId) {
         contentLogin.style.display = 'none';
+
+        if (userData && userData.isrecruiter) {
+            createdLiRecruiter();
+        }
     } else {
         contentLogin.classList.remove('hidden');
     }
 }
 
+const registerContainer = document.getElementById('registerContainer');
+function returnToRegister() {
+    registerContainer.classList.add('active');
+}
+
+function returnToLogin() {
+    registerContainer.classList.remove('active');
+}
+
+/* Requisição de cadastro */
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const inputRegisterName = document.getElementById('inputRegisterName').value;
+    const inputRegisterEmail = document.getElementById('inputRegisterEmail').value;
+    const inputRegisterPassword = document.getElementById('inputRegisterPassword').value;
+    const inputRegisterPasswordConfirm = document.getElementById('inputRegisterPasswordConfirm').value;
+    const inputRegisterIsRecruiter = document.getElementById('inputRegisterIsRecruiter').value;
+
+    if(inputRegisterPassword !== inputRegisterPasswordConfirm) {
+        registerMessage.textContent = 'As senhas não são iguais!';
+        registerMessage.className = 'error';
+        return;
+    }
+
+    fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body:JSON.stringify({ 
+            name: inputRegisterName,
+            email: inputRegisterEmail,
+            password: inputRegisterPassword,
+            isrecruiter: inputRegisterIsRecruiter
+        })
+    })
+    .then(async (res) => {
+        if(res.status === 200) {
+            const data = await res.json();
+            console.log(data);
+            localStorage.setItem('user_id', data.user.id);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            registerMessage.textContent = 'Cadastro realizado!';
+            registerMessage.className = 'success';
+
+            if(data.user.isrecruiter === 1) {
+                createdLiRecruiter();
+            }
+
+            setTimeout(() => {
+                contentLogin.style.display = 'none';
+            }, 700);
+
+        } else {
+            registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
+            registerMessage.className = 'error';
+        }
+    })
+    .catch((err) => {
+        console.error('Erro no cadastro:', err);
+        if(err.status === 409) {
+            registerMessage.textContent = 'Email já cadastrado!';
+            registerMessage.className = 'error';
+            return;
+        }
+        registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
+        registerMessage.className = 'error';
+    })
+})
+
+/* Requeisição de login */
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -27,40 +110,67 @@ loginForm.addEventListener('submit', async (e) => {
             password: inputPassword
         })
     })
-        .then(async (res) => {
-            if (res.status === 200) {
-                const data = await res.json();
+    .then(async (res) => {
+        if (res.status === 200) {
+            const data = await res.json();
 
-                localStorage.setItem('user_id', data.user.id);
-                localStorage.setItem('user_name', data.user.name);
+            localStorage.setItem('user_id', data.user.id);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            loginMessage.textContent = 'Login realizado!';
+            loginMessage.className = 'success';
 
-                loginMessage.textContent = 'Login realizado!';
-                loginMessage.className = 'success';
-
-                setTimeout(() => {
-                    contentLogin.style.display = 'none';
-                }, 700);
-
-            } else {
-                loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
-                loginMessage.className = 'error';
+            if(data.user.isrecruiter === 1) {
+                createdLiRecruiter();
             }
-        })
-        .catch((err) => {
-            loginMessage.textContent = 'Não foi possivel realizar o login.';
+
+            setTimeout(() => {
+                contentLogin.style.display = 'none';
+            }, 700);
+
+        } else {
+            loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
             loginMessage.className = 'error';
-            console.error('Erro no login:', err);
-        });
+        }
+    })
+    .catch((err) => {
+        loginMessage.textContent = 'Não foi possivel realizar o login.';
+        loginMessage.className = 'error';
+        console.error('Erro no login:', err);
+    });
 });
 
-
+/* Deslogar */
 function logout() {
     localStorage.clear();
     location.reload();
     contentLogin.style.display = 'block';
 }
 
-/* Icon menu */
+function createdLiRecruiter() {
+    const recruiterOn = document.getElementById('recruiterOn');
+    const userData = JSON.parse(localStorage.getItem('user'));
+
+    if (userData && userData.isrecruiter === 1) {
+        const createdTagA = document.createElement('a');
+        createdTagA.href = '#recrutador';
+        createdTagA.classList.add('links');
+        createdTagA.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                stroke-linecap="round" stroke-linejoin="round" 
+                class="lucide lucide-inbox-icon lucide-inbox">
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+                <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+            </svg>
+            <p>Todos os Currículos</p>
+        `;
+        recruiterOn.appendChild(createdTagA);
+        recruiterOn.classList.remove('hidden');
+    }
+}
+
+/* Menu do header de navegação */
 const openMenuBtn = document.getElementById('openIcon');
 const closeMenuBtn = document.getElementById('closeIcon');
 const menuList = document.getElementById('menuList');
@@ -77,6 +187,7 @@ closeMenuBtn.addEventListener('click', function () {
     menuList.classList.add('hidden');
 });
 
+/*  Navegação interna */
 if (userId) {
     const linksInternal = document.querySelectorAll('.links');
     linksInternal.forEach(link => {
@@ -95,10 +206,11 @@ if (userId) {
         })
     });
 
+    /* Renderização de página */
     function RenderPage() {
 
         const hash = window.location.hash;
-        
+
         const curriculoFormContent = document.getElementById('contentCurriculos');
         const homeContent = document.getElementById('home');
 
@@ -127,47 +239,285 @@ if (userId) {
     });
 }
 
-document.getElementById('curriculoForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+/* Formatação de CPF */
+const inputCpf = document.getElementById('inputCpf');
+inputCpf.addEventListener('input', function () {
+    let value = this.value.replace(/\D/g, '');
 
-    const cpf = document.getElementById('cpf').value;
-    if (!validarCPF(cpf)) {
-        alert('CPF inválido!');
-        return;
+    if (value.length > 11) {
+        value = value.slice(0, 11);
     }
 
-    const dataBr = document.getElementById('dataNasc').value;
-    const dataParts = dataBr.split('/');
-    const dataFormatada = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
-    const body = {
-        name: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        login: document.getElementById('loginCadastro').value,
-        password: document.getElementById('senhaCadastro').value,
-        cpf,
-        dataNasc: dataFormatada,
-        sexo: document.getElementById('sexo').value,
-        estadocivil: document.getElementById('estadocivil').value,
-        escolaridade: document.getElementById('escolaridade').value,
-        cursos: document.getElementById('cursos').value,
-        experiencia: document.getElementById('experiencia').value,
-        pretensao_salarial: document.getElementById('pretensao_salarial').value
-    };
+    this.value = value;
+});
 
-    // TODO: Validar login duplicado no backend antes de cadastrar
-    const res = await fetch('http://localhost:3000/curriculos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+/* Formatação de data */
+const inputDataNasc = document.getElementById('inputDataNasc');
+inputDataNasc.addEventListener('input', function () {
+    let value = this.value.replace(/\D/g, '');
+
+    if (value.length > 8) {
+        value = value.slice(0, 8);
+    }
+    value = value.replace(/(\d{2})(\d)/, '$1/$2');
+    value = value.replace(/(\d{2})(\d)/, '$1/$2');
+    value = value.replace(/(\d{2})(\d{1,4})$/, '$1$2');
+
+    this.value = value;
+});
+
+/* Formatação da pretenção salarial */
+const inputPretensao = document.getElementById('pretensao_salarial');
+inputPretensao.addEventListener('input', function () {
+    let value = this.value.replace(/\D/g, '');
+
+    value = value.substring(0, 10);
+
+    value = (Number(value) / 100).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
     });
 
-    const msg = document.getElementById('curriculoMsg');
-    if (res.ok) {
-        msg.textContent = 'Currículo salvo com sucesso!';
-        msg.className = 'success';
-    } else {
-        msg.textContent = 'Erro ao salvar o currículo.';
-        msg.className = 'error';
+    this.value = value;
+});
+
+
+/* Requisição criar curriculo */
+const curriculoForm = document.getElementById('curriculoForm');
+
+curriculoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if(!userId) return;
+    
+    const inputCurriculoMsg = document.getElementById('curriculoMsg');
+    curriculoForm.classList.remove('hidden');
+    /* Formatação dos dados, antes de enviar */
+    const cpfClean = inputCpf.value.replace(/\D/g, '');
+    const [day, month, year] = inputDataNasc.value.split('/');
+    const dataNascFormat = `${year}-${month}-${day}`;
+    const salarioClean = inputPretensao.value.replace(/\D/g, '').replace(/^0+/, '');
+    const salarioFormat = (Number(salarioClean) / 100).toFixed(2);
+
+    const dataForm = {
+        name: document.getElementById('inputName').value,
+        email: document.getElementById('inputEmail').value,
+        cpf: cpfClean,
+        dataNasc: dataNascFormat,
+        sexo: document.getElementById('sexo').value,
+        estadocivil: document.getElementById('inputEstadocivil').value,
+        escolaridade: document.getElementById('inputEscolaridade').value,
+        cursos: document.getElementById('cursos').value,
+        experiencia: document.getElementById('experiencia').value,
+        pretensao_salarial: salarioFormat,
+        user_id: userId
+    };
+
+    const isEditing = curriculoForm.dataset.curriculoId;
+    const url = isEditing ? `http://localhost:3000/curriculos/${isEditing}` : 'http://localhost:3000/curriculos';
+    const methodRequest = isEditing ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: methodRequest,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataForm)
+        });
+
+        if (response.status === 200) {
+            inputCurriculoMsg.textContent = isEditing
+                ? 'Currículo atualizado com sucesso!'
+                : 'Currículo criado com sucesso!'
+            ;
+            inputCurriculoMsg.className = 'success';
+
+            if(!isEditing) {
+                curriculoForm.reset();
+            }
+            delete curriculoForm.dataset.curriculoId;
+
+            setTimeout(() => {
+                inputCurriculoMsg.textContent = '';
+                inputCurriculoMsg.className = '';
+            }, 2000);
+        } else {
+            inputCurriculoMsg.textContent = 'Não foi possível criar o curriculo!';
+            inputCurriculoMsg.className = 'error';
+        }
+    } catch(err) {
+        console.log(err);
+        inputCurriculoMsg.textContent = 'Não foi possível criar o curriculo!';
+        inputCurriculoMsg.className = 'error';
     }
 });
+
+/* Abertura do form de curriculo */
+const mainBtn = document.querySelectorAll('.mainBtn');
+const returnBtn = document.getElementById('returnBtn');
+const updateCurriculoText = document.getElementById('updateCurriculoText');
+const registerCurriculoText = document.getElementById('registerCurriculoText');
+const curriculoList = document.getElementById('curriculoList');
+
+function openRegisterCurriculo() {
+    curriculoList.classList.add('hidden');
+
+    mainBtn.forEach(btn => {
+        btn.classList.add('hidden');
+    });
+    returnBtn.classList.remove('hidden');
+
+    updateCurriculoText.classList.add('hidden');
+
+    if(registerCurriculoText.classList.contains('hidden')) {
+        registerCurriculoText.classList.remove('hidden');
+    }
+
+    curriculoForm.reset();
+    curriculoForm.classList.remove('hidden');
+}
+
+/* Retornar para a tela de curriculos */
+function returnToCurriculoList() {
+    mainBtn.forEach(btn => {
+        btn.classList.remove('hidden');
+    });
+
+    registerCurriculoText.classList.add('hidden');
+    updateCurriculoText.classList.add('hidden');
+
+    returnBtn.classList.add('hidden');
+
+    curriculoForm.classList.add('hidden');     
+    curriculoList.classList.remove('hidden'); 
+
+    location.hash = '#curriculos';
+    RenderPage(); 
+}
+
+/* Requisição listar curriculos */
+const curriculoNotFound = document.getElementById('curriculoNotFound');
+const curriculoName = document.getElementById('curriculoName');
+const dateCreated = document.getElementById('dateCreated');
+const curriculoItemTemplate = document.getElementById('curriculoItemTemplate');
+
+async function openUpdateCurriculo() {
+    mainBtn.forEach(btn => {
+        btn.classList.add('hidden');
+    });
+
+    registerCurriculoText.classList.add('hidden');
+    updateCurriculoText.classList.remove('hidden');
+    returnBtn.classList.remove('hidden');
+
+    try {
+        const response = await fetch(`http://localhost:3000/users/${userId}/curriculos`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const curriculosData = await response.json();
+
+        
+        if(curriculosData.length > 0) {
+
+            curriculoList.innerHTML = '';
+            curriculoList.classList.remove('hidden');
+            console.log('entrou aq')
+            curriculosData.forEach(item => {
+                const template = curriculoItemTemplate.content.cloneNode(true);
+                const curriculoItem = template.querySelector('.curriculo-item');
+
+                curriculoItem.classList.remove('hidden');
+                curriculoItem.classList.remove('hidden');
+                curriculoItem.removeAttribute('id');
+
+                const dateFormatted = formatarData(item.created_at.split('T')[0]);
+
+                curriculoItem.querySelector('.curriculoName').textContent = `Nome: ${item.name}`;
+                curriculoItem.querySelector('.curriculoDate').textContent = `Criado em: ${dateFormatted}`;
+
+                const editCurriculoBtn = curriculoItem.querySelector('.editCurriculoBtn');
+                editCurriculoBtn.addEventListener('click', () => {
+                    formChangeCurriculo(item);
+                });
+
+                const deleteCurriculoBtn = curriculoItem.querySelector('.deleteCurriculoBtn');
+                deleteCurriculoBtn.addEventListener('click', () => {
+                    deleteCurriculo(item.id);
+                });
+
+                curriculoList.appendChild(template);
+            });
+
+        } else {
+            updateCurriculoText.classList.add('hidden');
+            curriculoList.classList.remove('hidden');
+            curriculoNotFound.classList.remove('hidden');
+        }
+            
+    } catch(err) {
+        console.log(err);
+        curriculoNotFound.classList.remove('hidden');
+    }
+}
+
+/*  Requisição deletar curriculo */ 
+function deleteCurriculo(id) {
+    fetch(`http://localhost:3000/curriculos/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(() => {
+        window.location.reload();
+        curriculoList.classList.remove('hidden');
+    });
+}
+
+/* Formatação do form de curriculo para edição */
+function formChangeCurriculo(item) {
+    curriculoForm.reset();
+    curriculoForm.dataset.curriculoId = item.id;
+
+    curriculoList.classList.add('hidden');
+    updateCurriculoText.classList.add('hidden');
+    curriculoForm.classList.remove('hidden');
+    
+    document.getElementById('inputName').value = item.name;
+    document.getElementById('inputEmail').value = item.email;
+    document.getElementById('sexo').value = item.sexo;
+    document.getElementById('inputEstadocivil').value = item.estadocivil;
+    document.getElementById('inputEscolaridade').value = item.escolaridade;
+    document.getElementById('cursos').value = item.cursos;
+    document.getElementById('experiencia').value = item.experiencia;
+
+    const cpfFormatted = formatarCPF(item.cpf);
+    document.getElementById('inputCpf').value = cpfFormatted;
+
+    const [year, month, day] = item.dataNasc.split('T')[0].split('-');
+    document.getElementById('inputDataNasc').value = `${day}/${month}/${year}`;
+    
+    const salarioFormatted = (parseFloat(item.pretensao_salarial)).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+    document.getElementById('pretensao_salarial').value = salarioFormatted;
+}
+
+function formatarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, '');
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+
+function formatarData(data) {
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
+}
