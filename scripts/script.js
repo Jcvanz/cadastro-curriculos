@@ -63,7 +63,7 @@ registerForm.addEventListener('submit', async (e) => {
         .then(async (res) => {
             if (res.status === 200) {
                 const data = await res.json();
-                console.log(data);
+
                 localStorage.setItem('user_id', data.user.id);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
@@ -321,7 +321,7 @@ curriculoForm.addEventListener('submit', async (e) => {
 
     const inputCurriculoMsg = document.getElementById('curriculoMsg');
     curriculoForm.classList.remove('hidden');
-    /* Formatação dos dados, antes de enviar */
+
     const cpfClean = inputCpf.value.replace(/\D/g, '');
     const [day, month, year] = inputDataNasc.value.split('/');
     const dataNascFormat = `${year}-${month}-${day}`;
