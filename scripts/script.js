@@ -359,7 +359,7 @@ curriculoForm.addEventListener('submit', async (e) => {
             inputCurriculoMsg.textContent = isEditing
                 ? 'Currículo atualizado com sucesso!'
                 : 'Currículo criado com sucesso!'
-                ;
+            ;
             inputCurriculoMsg.className = 'success';
 
             if (!isEditing) {
@@ -459,7 +459,7 @@ async function openUpdateCurriculo() {
 
             curriculoList.innerHTML = '';
             curriculoList.classList.remove('hidden');
-            console.log('entrou aq')
+            
             curriculosData.forEach(item => {
                 const template = curriculoItemTemplate.content.cloneNode(true);
                 const curriculoItem = template.querySelector('.curriculo-item');
@@ -562,7 +562,9 @@ function closeDeleteAccountModal() {
     deleteAccountModalContent.classList.add('hidden');
 }
 
-function deleteAccount() {
+const deleteAccountConfirm = document.getElementById('deleteAccountConfirm');
+
+deleteAccountConfirm.addEventListener('click', () => {
 
     const msgDelete = document.getElementById('msgDelete');
 
@@ -596,7 +598,7 @@ function deleteAccount() {
             msgDelete.textContent = 'Não foi possível deletar a conta!';
             msgDelete.className = 'error';
         });
-}
+});
 
 const inputInfoName = document.getElementById('inputInfoName');
 const inputInfoEmail = document.getElementById('inputInfoEmail');
