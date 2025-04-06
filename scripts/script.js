@@ -8,19 +8,21 @@ const userData = JSON.parse(localStorage.getItem('user'));
 
 /* Verificação se o usuário está logado */
 window.onload = () => {
-    const userData = JSON.parse(localStorage.getItem('user'));
-
-    if (userId) {
-        contentLogin.style.display = 'none';
-
-        if (userData && userData.isrecruiter) {
-            createdLiRecruiter();
-        }
-    } else {
+    if (!userId || !userData) {
+        localStorage.clear();
         contentLogin.classList.remove('hidden');
+        return;
     }
-}
 
+    contentLogin.classList.add('hidden');
+
+    if (userData.isrecruiter === 1) {
+        createdLiRecruiter();
+    }
+};
+
+
+/* Requisição de cadastro */
 const registerContainer = document.getElementById('registerContainer');
 function returnToRegister() {
     registerContainer.classList.add('active');
@@ -30,7 +32,6 @@ function returnToLogin() {
     registerContainer.classList.remove('active');
 }
 
-/* Requisição de cadastro */
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -40,7 +41,7 @@ registerForm.addEventListener('submit', async (e) => {
     const inputRegisterPasswordConfirm = document.getElementById('inputRegisterPasswordConfirm').value;
     const inputRegisterIsRecruiter = document.getElementById('inputRegisterIsRecruiter').value;
 
-    if(inputRegisterPassword !== inputRegisterPasswordConfirm) {
+    if (inputRegisterPassword !== inputRegisterPasswordConfirm) {
         registerMessage.textContent = 'As senhas não são iguais!';
         registerMessage.className = 'error';
         return;
@@ -51,47 +52,48 @@ registerForm.addEventListener('submit', async (e) => {
         headers: {
             "Content-Type": "application/json"
         },
-        body:JSON.stringify({ 
+        body: JSON.stringify({
             name: inputRegisterName,
             email: inputRegisterEmail,
             password: inputRegisterPassword,
             isrecruiter: inputRegisterIsRecruiter
         })
     })
-    .then(async (res) => {
-        if(res.status === 200) {
-            const data = await res.json();
-            console.log(data);
-            localStorage.setItem('user_id', data.user.id);
-            localStorage.setItem('user', JSON.stringify(data.user));
+        .then(async (res) => {
+            if (res.status === 200) {
+                const data = await res.json();
+                console.log(data);
+                localStorage.setItem('user_id', data.user.id);
+                localStorage.setItem('user', JSON.stringify(data.user));
 
-            registerMessage.textContent = 'Cadastro realizado!';
-            registerMessage.className = 'success';
+                registerMessage.textContent = 'Cadastro realizado!';
+                registerMessage.className = 'success';
 
-            if(data.user.isrecruiter === 1) {
-                createdLiRecruiter();
+                if (data.user.isrecruiter === 1) {
+                    createdLiRecruiter();
+                }
+
+                setTimeout(() => {
+                    contentLogin.style.display = 'none';
+                }, 700);
+
+            } else {
+                registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
+                registerMessage.className = 'error';
             }
-
-            setTimeout(() => {
-                contentLogin.style.display = 'none';
-            }, 700);
-
-        } else {
+        })
+        .catch((err) => {
+            console.error('Erro no cadastro:', err);
+            if (err.status === 409) {
+                registerMessage.textContent = 'Email já cadastrado!';
+                registerMessage.className = 'error';
+                return;
+            }
             registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
             registerMessage.className = 'error';
-        }
-    })
-    .catch((err) => {
-        console.error('Erro no cadastro:', err);
-        if(err.status === 409) {
-            registerMessage.textContent = 'Email já cadastrado!';
-            registerMessage.className = 'error';
-            return;
-        }
-        registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
-        registerMessage.className = 'error';
-    })
+        })
 })
+
 
 /* Requeisição de login */
 loginForm.addEventListener('submit', async (e) => {
@@ -110,35 +112,36 @@ loginForm.addEventListener('submit', async (e) => {
             password: inputPassword
         })
     })
-    .then(async (res) => {
-        if (res.status === 200) {
-            const data = await res.json();
+        .then(async (res) => {
+            if (res.status === 200) {
+                const data = await res.json();
 
-            localStorage.setItem('user_id', data.user.id);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            loginMessage.textContent = 'Login realizado!';
-            loginMessage.className = 'success';
+                localStorage.setItem('user_id', data.user.id);
+                localStorage.setItem('user', JSON.stringify(data.user));
 
-            if(data.user.isrecruiter === 1) {
-                createdLiRecruiter();
+                loginMessage.textContent = 'Login realizado!';
+                loginMessage.className = 'success';
+
+                if (data.user.isrecruiter === 1) {
+                    createdLiRecruiter();
+                }
+
+                setTimeout(() => {
+                    contentLogin.style.display = 'none';
+                }, 700);
+
+            } else {
+                loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
+                loginMessage.className = 'error';
             }
-
-            setTimeout(() => {
-                contentLogin.style.display = 'none';
-            }, 700);
-
-        } else {
-            loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
+        })
+        .catch((err) => {
+            loginMessage.textContent = 'Não foi possivel realizar o login.';
             loginMessage.className = 'error';
-        }
-    })
-    .catch((err) => {
-        loginMessage.textContent = 'Não foi possivel realizar o login.';
-        loginMessage.className = 'error';
-        console.error('Erro no login:', err);
-    });
+            console.error('Erro no login:', err);
+        });
 });
+
 
 /* Deslogar */
 function logout() {
@@ -147,6 +150,8 @@ function logout() {
     contentLogin.style.display = 'block';
 }
 
+
+/* Criar o link de recrutador no header */
 function createdLiRecruiter() {
     const recruiterOn = document.getElementById('recruiterOn');
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -170,6 +175,7 @@ function createdLiRecruiter() {
     }
 }
 
+
 /* Menu do header de navegação */
 const openMenuBtn = document.getElementById('openIcon');
 const closeMenuBtn = document.getElementById('closeIcon');
@@ -186,6 +192,7 @@ closeMenuBtn.addEventListener('click', function () {
     openMenuBtn.classList.remove('hidden');
     menuList.classList.add('hidden');
 });
+
 
 /*  Navegação interna */
 if (userId) {
@@ -213,9 +220,13 @@ if (userId) {
 
         const curriculoFormContent = document.getElementById('contentCurriculos');
         const homeContent = document.getElementById('home');
+        const contentInfo = document.getElementById('contentInfo');
+        const contentRecruiters = document.getElementById('contentRecruiters');
 
         curriculoFormContent.classList.add('hidden');
         homeContent.classList.add('hidden');
+        contentInfo.classList.add('hidden');
+        contentRecruiters.classList.add('hidden');
 
         switch (hash) {
             case '#home':
@@ -223,6 +234,12 @@ if (userId) {
                 break;
             case '#curriculos':
                 curriculoFormContent.classList.remove('hidden');
+                break;
+            case '#informacoes':
+                contentInfo.classList.remove('hidden');
+                break;
+            case '#recrutador':
+                contentRecruiters.classList.remove('hidden');
                 break;
             default:
                 homeContent.classList.remove('hidden');
@@ -292,8 +309,8 @@ const curriculoForm = document.getElementById('curriculoForm');
 curriculoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    if(!userId) return;
-    
+    if (!userId) return;
+
     const inputCurriculoMsg = document.getElementById('curriculoMsg');
     curriculoForm.classList.remove('hidden');
     /* Formatação dos dados, antes de enviar */
@@ -334,10 +351,10 @@ curriculoForm.addEventListener('submit', async (e) => {
             inputCurriculoMsg.textContent = isEditing
                 ? 'Currículo atualizado com sucesso!'
                 : 'Currículo criado com sucesso!'
-            ;
+                ;
             inputCurriculoMsg.className = 'success';
 
-            if(!isEditing) {
+            if (!isEditing) {
                 curriculoForm.reset();
             }
             delete curriculoForm.dataset.curriculoId;
@@ -350,7 +367,7 @@ curriculoForm.addEventListener('submit', async (e) => {
             inputCurriculoMsg.textContent = 'Não foi possível criar o curriculo!';
             inputCurriculoMsg.className = 'error';
         }
-    } catch(err) {
+    } catch (err) {
         console.log(err);
         inputCurriculoMsg.textContent = 'Não foi possível criar o curriculo!';
         inputCurriculoMsg.className = 'error';
@@ -364,6 +381,11 @@ const updateCurriculoText = document.getElementById('updateCurriculoText');
 const registerCurriculoText = document.getElementById('registerCurriculoText');
 const curriculoList = document.getElementById('curriculoList');
 
+const curriculoNotFound = document.getElementById('curriculoNotFound');
+const curriculoName = document.getElementById('curriculoName');
+const dateCreated = document.getElementById('dateCreated');
+const curriculoItemTemplate = document.getElementById('curriculoItemTemplate');
+
 function openRegisterCurriculo() {
     curriculoList.classList.add('hidden');
 
@@ -374,13 +396,14 @@ function openRegisterCurriculo() {
 
     updateCurriculoText.classList.add('hidden');
 
-    if(registerCurriculoText.classList.contains('hidden')) {
+    if (registerCurriculoText.classList.contains('hidden')) {
         registerCurriculoText.classList.remove('hidden');
     }
 
     curriculoForm.reset();
     curriculoForm.classList.remove('hidden');
 }
+
 
 /* Retornar para a tela de curriculos */
 function returnToCurriculoList() {
@@ -393,19 +416,17 @@ function returnToCurriculoList() {
 
     returnBtn.classList.add('hidden');
 
-    curriculoForm.classList.add('hidden');     
-    curriculoList.classList.remove('hidden'); 
+    curriculoForm.classList.add('hidden');
+    curriculoNotFound.classList.add('hidden');
+
+    curriculoList.innerHTML = '';
+    curriculoList.classList.remove('hidden');
 
     location.hash = '#curriculos';
-    RenderPage(); 
+    RenderPage();
 }
 
-/* Requisição listar curriculos */
-const curriculoNotFound = document.getElementById('curriculoNotFound');
-const curriculoName = document.getElementById('curriculoName');
-const dateCreated = document.getElementById('dateCreated');
-const curriculoItemTemplate = document.getElementById('curriculoItemTemplate');
-
+/* Requisição listar curriculos do usuario */
 async function openUpdateCurriculo() {
     mainBtn.forEach(btn => {
         btn.classList.add('hidden');
@@ -425,8 +446,8 @@ async function openUpdateCurriculo() {
 
         const curriculosData = await response.json();
 
-        
-        if(curriculosData.length > 0) {
+
+        if (curriculosData.length > 0) {
 
             curriculoList.innerHTML = '';
             curriculoList.classList.remove('hidden');
@@ -462,14 +483,14 @@ async function openUpdateCurriculo() {
             curriculoList.classList.remove('hidden');
             curriculoNotFound.classList.remove('hidden');
         }
-            
-    } catch(err) {
+
+    } catch (err) {
         console.log(err);
         curriculoNotFound.classList.remove('hidden');
     }
 }
 
-/*  Requisição deletar curriculo */ 
+/*  Requisição deletar curriculo */
 function deleteCurriculo(id) {
     fetch(`http://localhost:3000/curriculos/${id}`, {
         method: 'DELETE',
@@ -490,7 +511,7 @@ function formChangeCurriculo(item) {
     curriculoList.classList.add('hidden');
     updateCurriculoText.classList.add('hidden');
     curriculoForm.classList.remove('hidden');
-    
+
     document.getElementById('inputName').value = item.name;
     document.getElementById('inputEmail').value = item.email;
     document.getElementById('sexo').value = item.sexo;
@@ -504,7 +525,7 @@ function formChangeCurriculo(item) {
 
     const [year, month, day] = item.dataNasc.split('T')[0].split('-');
     document.getElementById('inputDataNasc').value = `${day}/${month}/${year}`;
-    
+
     const salarioFormatted = (parseFloat(item.pretensao_salarial)).toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
@@ -520,4 +541,124 @@ function formatarCPF(cpf) {
 function formatarData(data) {
     const [ano, mes, dia] = data.split('-');
     return `${dia}/${mes}/${ano}`;
+}
+
+/* Tela de edição da conta */
+const deleteAccountModalContent = document.getElementById('deleteAccountModal');
+function deleteAccountModal() {
+    deleteAccountModalContent.classList.remove('hidden');
+}
+
+function closeDeleteAccountModal() {
+    deleteAccountModalContent.classList.add('hidden');
+}
+
+function deleteAccount() {
+
+    const msgDelete = document.getElementById('msgDelete');
+
+    fetch(`http://localhost:3000/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then((res) => {
+            if (res.status === 200) {
+                msgDelete.classList.remove('hidden');
+                msgDelete.textContent = 'Conta deletada com sucesso!';
+                msgDelete.className = 'success';
+
+                setTimeout(() => {
+                    deleteAccountModalContent.classList.add('hidden');
+                    closeDeleteAccountModal();
+                    logout();
+                }, 600);
+
+            } else {
+                msgDelete.classList.remove('hidden');
+                msgDelete.textContent = 'Não foi possível deletar a conta!';
+                msgDelete.className = 'error';
+            }
+        })
+        .catch((err) => {
+            console.error('Erro ao deletar conta:', err);
+            msgDelete.classList.remove('hidden');
+            msgDelete.textContent = 'Não foi possível deletar a conta!';
+            msgDelete.className = 'error';
+        });
+}
+
+const inputInfoName = document.getElementById('inputInfoName');
+const inputInfoEmail = document.getElementById('inputInfoEmail');
+const inputInfoPassword = document.getElementById('inputInfoPassword');
+
+const updateInfo = document.getElementById('updateInfo');
+const infoMessage = document.getElementById('infoMessage');
+const coolinputs = document.querySelectorAll('#formInfo .coolinput');
+
+function loadUserInfo() {
+    if (!userData) return;
+
+    inputInfoName.value = userData.name;
+    inputInfoEmail.value = userData.email;
+    inputInfoPassword.value = userData.password;
+}
+
+loadUserInfo();
+
+function editDataUser() {
+    const isEditing = updateInfo.textContent === 'Salvar';
+
+    if (!isEditing) {
+        coolinputs.forEach(input => {
+            input.classList.remove('inputReadonly');
+        });
+
+        updateInfo.textContent = 'Salvar';
+
+        inputInfoName.removeAttribute('readonly');
+        inputInfoEmail.removeAttribute('readonly');
+        inputInfoPassword.removeAttribute('readonly');
+
+        inputInfoName.focus();
+    } else {
+        const updateDataUser = {
+            name: inputInfoName.value,
+            email: inputInfoEmail.value,
+            password: inputInfoPassword.value
+        };
+
+        fetch(`http://localhost:3000/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateDataUser)
+        })
+            .then(async (res) => {
+                if (res.status === 200) {
+                    const updatedDataUser = await res.json();
+                    localStorage.setItem('user', JSON.stringify(updatedDataUser));
+
+                    inputInfoName.setAttribute('readonly', true);
+                    inputInfoEmail.setAttribute('readonly', true);
+                    inputInfoPassword.setAttribute('readonly', true);
+
+                    coolinputs.forEach(input => input.classList.add('inputReadonly'));
+                    updateInfo.textContent = 'Editar Informações';
+
+                    infoMessage.textContent = 'Dados atualizados com sucesso!';
+                    infoMessage.className = 'success';
+                } else {
+                    infoMessage.textContent = 'Não foi possível atualizar os dados!';
+                    infoMessage.className = 'error';
+                }
+            })
+            .catch((err) => {
+                console.error('Erro ao atualizar dados:', err);
+                infoMessage.textContent = 'Não foi possível atualizar os dados!';
+                infoMessage.className = 'error';
+            });
+    }
 }

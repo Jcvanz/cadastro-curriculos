@@ -23,6 +23,27 @@ input:-webkit-autofill {
     display: none !important;
 }
 
+.container {
+    width: 100%;
+    height: 100%;
+    max-width: 1700px;
+    background-color: #fff;
+    padding: 2rem;
+    overflow: auto;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#formInfo .btns-form-content .btn-form {
+    max-width: 150px;
+}
+
+#formInfo .btns-form-content .btn-form#deleteAccount {
+    background-color: #fe5d5d;
+    color: #fff;
+    border: 1px #fe5d5d solid;
+}
+
 .root {
     min-height: 100vh;
     width: 100%;
@@ -140,12 +161,15 @@ nav .menu span svg:hover {
     margin-right: 10px;
 }
 
-.menu-list ul li:last-child span {
-    border-top: 1px solid #333;
-    margin-top: 15px;
-    padding: 5px 0;
+.menu-list ul li span {
     display: flex;
     align-items: center;
+}
+
+.menu-list ul li a.linkBorder {
+    border-top: 1px solid #333;
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .menu-list ul h2 {
@@ -382,6 +406,62 @@ nav .menu span svg:hover {
     }
 }
 
+/* Informações da conta */
+.content-info {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+}
+
+.modal-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.701);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.delete-confirm {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 2rem;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirm h3 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.delete-confirm p {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.delete-confirm .btns-form-content {
+    justify-content: center;
+}
+
+.delete-confirm .btns-form-content .btn-form:first-child {
+    background-color: #fe5d5d;
+    color: #fff;
+    border: 1px #fe5d5d solid;
+}
+
 /* Inputs padrão */
 .coolinput {
     display: flex;
@@ -409,6 +489,20 @@ nav .menu span svg:hover {
     border: 1px #333 solid;
     border-radius: 5px; 
     background: #fff;
+}
+
+.coolinput.inputReadonly label.label {
+    color: #787878;
+}
+
+.coolinput.inputReadonly .input {
+    border: 1px #d2d2d2 solid;
+    color: #787878;
+    cursor: default;
+}
+
+.coolinput.inputReadonly .input:focus {
+    outline: none;
 }
 
 .btn-form {
@@ -466,30 +560,19 @@ nav .menu span svg:hover {
     max-width: 150px;
 }
 
-.curriculo-container {
-    width: 100%;
-    height: 100%;
-    max-width: 1700px;
-    background-color: #fff;
-    padding: 2rem;
-    overflow: auto;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.curriculo-header {
+.container-header {
     margin-bottom: 20px;
     width: 100%;
 }
 
-.curriculo-header h3 {
+.container-header h3 {
     font-size: 25px;
     font-weight: 600;
     color: #333;
     margin-bottom: 0.3rem;
 }
 
-.curriculo-header span {
+.container-header span {
     font-size: 18px;
     font-weight: 400;
     color: #333;
@@ -601,7 +684,7 @@ nav .menu span svg:hover {
 }
 
 @media (max-width: 500px) {
-    .curriculo-container {
+    .content-curriculos .container {
         padding: 1rem;
     }
 
@@ -616,4 +699,11 @@ nav .menu span svg:hover {
     .form-curriculos .btn-form {
         max-width: 100%;
     }
+}
+
+/* tela recrutadores */ 
+.content-recruiters {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
 }

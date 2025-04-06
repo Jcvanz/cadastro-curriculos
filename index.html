@@ -71,6 +71,19 @@
                     </li>
                     <li class="hidden" id="recruiterOn"></li>
                     <li>
+                        <a href="#informacoes" class="links linkBorder">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-circle-user-round-icon lucide-circle-user-round">
+                                <path d="M18 20a6 6 0 0 0-12 0" />
+                                <circle cx="12" cy="10" r="4" />
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <p>Informações</p>
+                        </a>
+                    </li>
+                    <li>
                         <span onclick="logout()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -106,24 +119,77 @@
                 </div>
             </div>
 
+            <!-- Informaçãoes da conta -->
+            <div class="content-info hidden" id="contentInfo">
+                <div class="container">
+                    <div class="info-container">
+                        <div class="container-header">
+                            <h3>Informaçãoes da Conta</h3>
+                        </div>
+                        <div class="info-list">
+                            <form id="formInfo">
+                                <div class="coolinput inputReadonly">
+                                    <label for="name" class="label">Nome</label>
+                                    <input type="text" readonly id="inputInfoName" required name="name" class="input">
+                                </div>
+                                <div class="coolinput inputReadonly ">
+                                    <div class="coolinput ">
+                                        <label for="email" class="label">Email</label>
+                                        <input type="text" readonly id="inputInfoEmail" required name="email"
+                                            class="input">
+                                    </div>
+                                    <div class="coolinput inputReadonly">
+                                        <label for="password" class="label">Senha</label>
+                                        <input type="password" readonly id="inputInfoPassword" required name="password"
+                                            class="input">
+                                    </div>
+                                    <p class="hidden" id="infoMessage"></p>
+                                    <div class="btns-form-content">
+                                        <button type="button" id="updateInfo" class="btn-form"
+                                            onclick="editDataUser()">Editar Informações</button>
+                                        <button type="button" id="deleteAccount" onclick="deleteAccountModal()"
+                                            class="btn-form">Deletar Conta</button>
+                                    </div>
+                                    <div class="modal-content hidden" id="deleteAccountModal">
+                                        <div class="delete-confirm">
+                                            <h3>Você está prestes a deletar sua conta</h3>
+                                            <p>Tem certeza que deseja proceguir?</p>
+                                            <div class="btns-form-content">
+                                                <button type="button" onclick="deleteAccount()"
+                                                    class="btn-form">Sim</button>
+                                                <button type="button" onclick="closeDeleteAccountModal()"
+                                                    class="btn-form">Não</button>
+                                            </div>
+                                            <p class="hidden" id="msgDelete"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Formulário de cadastro | Tela de currículos -->
             <div class="content-curriculos" id="contentCurriculos">
-                <div class="curriculo-container">
+                <div class="container">
                     <div class="curriculo-header-container" id="curriculoHeader">
-                        <div class="curriculo-header hidden" id="updateCurriculoText">
+                        <div class="container-header hidden" id="updateCurriculoText">
                             <h3>Currículos Cadastrados</h3>
                             <span>
                                 Selecione um currículo para editar ou clique no botão abaixo para cadastrar um novo
                                 currículo
                             </span>
                         </div>
-                        <div class="curriculo-header hidden" id="registerCurriculoText">
+                        <div class="container-header hidden" id="registerCurriculoText">
                             <h3>Cadastrar Currículo</h3>
                             <span>Preencha os campos abaixo para cadastrar seu currículo</span>
                         </div>
                         <div class="header-btns">
-                            <button onclick="openRegisterCurriculo()" class="btn-form mainBtn">Cadastrar Currículo</button>
-                            <button onclick="openUpdateCurriculo()" class="btn-form mainBtn">Atualizar Currículo</button>
+                            <button onclick="openRegisterCurriculo()" class="btn-form mainBtn">Cadastrar
+                                Currículo</button>
+                            <button onclick="openUpdateCurriculo()" class="btn-form mainBtn">Atualizar
+                                Currículo</button>
                         </div>
                     </div>
                     <div class="curriculo-list hidden" id="curriculoList">
@@ -212,18 +278,19 @@
                         <p id="curriculoMsg"></p>
                         <div class="btns-form-content">
                             <button type="submit" class="btn-form">Salvar Currículo</button>
-                            <button type="button" id="returnBtn" onclick="returnToCurriculoList()" class="btn-form hidden">Voltar</button>
+                            <button type="button" id="returnBtn" onclick="returnToCurriculoList()"
+                                class="btn-form hidden">Voltar</button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <!-- Formulário de login -->
-            <div class="content-login hidden" id="contentLogin">
+            <div class="content-login" id="contentLogin">
                 <div class="login-container">
                     <div class="login-header">
                         <h3>Olá, seja bem-vindo!</h3>
-                        <span>Faça login para continuar</span>
+                        <span>Faça login parsa continuar</span>
                     </div>
                     <form id="loginForm">
                         <div class="coolinput">
@@ -236,7 +303,8 @@
                         </div>
                         <p id="loginMessage"></p>
                         <button type="submit" class="btn-form">Entrar</button>
-                        <span>Ainda nao possui uma conta? <a type="button" onclick="returnToRegister()">Cadastre-se</a></span>
+                        <span>Ainda nao possui uma conta? <a type="button"
+                                onclick="returnToRegister()">Cadastre-se</a></span>
                     </form>
                     <div class="register-container" id="registerContainer">
                         <div class="login-header">
@@ -254,11 +322,13 @@
                             </div>
                             <div class="coolinput">
                                 <label for="password" class="label">Senha</label>
-                                <input type="password" id="inputRegisterPassword" required name="password" class="input">
+                                <input type="password" id="inputRegisterPassword" required name="password"
+                                    class="input">
                             </div>
                             <div class="coolinput">
                                 <label for="confirmPassword" class="label">Confirme a Senha</label>
-                                <input type="password" id="inputRegisterPasswordConfirm" required name="confirmPassword" class="input">
+                                <input type="password" id="inputRegisterPasswordConfirm" required name="confirmPassword"
+                                    class="input">
                             </div>
                             <div class="coolinput">
                                 <label for="inputRegisterIsRecruiter" class="label">Tipo de Usuário</label>

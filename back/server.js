@@ -71,7 +71,14 @@ app.put('/users/:id', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Usuário atualizado',
+            user: {
+                id,
+                name,
+                email
+            }
+        });
     })
 });
 
