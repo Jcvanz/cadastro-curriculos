@@ -769,3 +769,7 @@ nav .menu span svg:hover {
     color: #333;
     margin-bottom: 0.5rem;
 }
+
+#recruitersList .curriculo-item:last-child {
+    border-bottom: none;
+}

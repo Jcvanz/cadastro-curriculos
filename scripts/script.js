@@ -505,7 +505,8 @@ function deleteCurriculo(id) {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(() => {
+    })
+    .then(() => {
         window.location.reload();
         curriculoList.classList.remove('hidden');
     });
@@ -686,6 +687,16 @@ async function loadAllCurriculos() {
         const response = await fetch('http://localhost:3000/curriculos');
         const data = await response.json();
 
+        if (!data.length) {
+            recruitersList.innerHTML = '<p>Nenhum currículo encontrado.</p>';
+            return;
+        }
+
+        const totalSalarial = data.reduce((acc, curriculo) => {
+            return acc + parseFloat(curriculo.pretensao_salarial);
+        }, 0);
+        const mediaSalarial = (totalSalarial / data.length);
+
         data.forEach(item => {
             const itemTemplate = template.content.cloneNode(true);
             const curriculoItem = itemTemplate.querySelector('.curriculo-item');
@@ -705,6 +716,14 @@ async function loadAllCurriculos() {
                 recuserBtn.textContent = 'Desmarcar';
             }
 
+            const pretensaoSalario = parseFloat(item.pretensao_salarial);
+
+            if (pretensaoSalario > mediaSalarial) {
+                curriculoPretencao.style.color = 'blue';
+            } else if (pretensaoSalario < mediaSalarial) {
+                curriculoPretencao.style.color = 'green';
+            }
+
             recuserBtn.addEventListener('click', () => {
                 toggleRecused(item.id, curriculoItem, recuserBtn);
             });
@@ -715,6 +734,19 @@ async function loadAllCurriculos() {
 
             recruitersList.appendChild(itemTemplate);
         });
+
+        const mediaSummary = document.createElement('div');
+        mediaSummary.classList.add('curriculo-item');
+        mediaSummary.style.marginTop = '2rem';
+        mediaSummary.innerHTML = `
+            <div class="curriculo-item-header">
+                <h3>Resumo dos salários</h3>
+                <p>Total de pretensão salarial: <strong>${totalSalarial.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></p>
+                <p>Média de pretensão salarial: <strong>${mediaSalarial.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></p>
+            </div>
+        `;
+
+        recruitersList.appendChild(mediaSummary);
     } catch(err) {
         console.error('Erro ao carregar currículos:', err);
         recruitersList.innerHTML = '<p>Erro ao carregar os currículos.</p>';
