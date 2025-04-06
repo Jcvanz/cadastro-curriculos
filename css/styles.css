@@ -631,8 +631,13 @@ nav .menu span svg:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px 5px;
     border-bottom: 1px solid #333;
+}
+
+.curriculo-item-header {
+    display: flex;
+    flex-direction: column;
 }
 
 .curriculos-not-found {
@@ -643,6 +648,25 @@ nav .menu span svg:hover {
 
 .curriculos-not-found .btn-form {
     max-width: 150px;
+}
+
+.curriculo-item.recused {
+    background-color: #00000039;
+}
+
+.curriculo-item.recused .curriculo-item-header {
+    cursor: default;
+    opacity: 0.3;
+}
+
+.curriculo-item.recused .btns-curriculo .seeDetailsCurriculoBtn {
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.curriculo-item.recused .btns-curriculo .recuserBtn {
+    background-color: #000000;
+    border: 1px #000000 solid;
 }
 
 @media (max-width: 850px) {
@@ -706,4 +730,42 @@ nav .menu span svg:hover {
     padding: 15px;
     height: 100%;
     width: 100%;
+}
+
+.curriculo-detalhes .container-header #mainInfosHeader {
+    width: 100%;
+    margin: 20px 0;
+    padding-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.curriculo-detalhes .container-header #mainInfosHeader p:first-child {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+}
+
+.curriculo-detalhes-content {
+    padding: 10px;
+}
+
+#curriculoInfo section {
+    margin-bottom: 1.8rem;
+}
+
+#curriculoInfo h4 {
+    font-size: 20px;
+    padding-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0.75rem;
+}
+
+#curriculoInfo p {
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 0.5rem;
 }

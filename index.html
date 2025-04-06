@@ -170,6 +170,44 @@
                 </div>
             </div>
 
+            <!-- Tela dos recutadores -->
+            <div class="content-recruiters hidden" id="contentRecruiters">
+                <div class="container">
+                    <div class="recruiters-container">
+                        <div class="container-header">
+                            <h3>Recrutadores</h3>
+                            <span>Aqui vocé pode ver todos os currículos cadastrados de forma fácil</span>
+                        </div>
+                        <div class="recruiters-list">
+                            <div id="recruitersList"></div>
+                            <template id="curriculoItemTemplate">
+                                <div class="curriculo-item">
+                                    <div class="curriculo-item-header">
+                                        <h3 class="curriculoName"></h3>
+                                        <span class="curriculoDate"></span>
+                                        <span class="curriculoPretencao"></span>
+                                    </div>
+                                    <div class="btns-curriculo">
+                                        <button class="btn-form seeDetailsCurriculoBtn">ver detalhes</button>
+                                        <button class="btn-form deleteCurriculoBtn recuserBtn">Recusar</button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="curriculo-detalhes hidden" id="curriculoDetalhes">
+                        <div class="container-header">
+                            <h3>Detalhes do currículo</h3>
+                            <div id="mainInfosHeader"></div>
+                        </div>
+                        <div class="curriculo-detalhes-content">
+                            <div id="curriculoInfo"></div>
+                            <button class="btn-form" onclick="closeResumeDetails()">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Formulário de cadastro | Tela de currículos -->
             <div class="content-curriculos" id="contentCurriculos">
                 <div class="container">

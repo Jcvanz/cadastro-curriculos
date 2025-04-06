@@ -18,6 +18,7 @@ window.onload = () => {
 
     if (userData.isrecruiter === 1) {
         createdLiRecruiter();
+        loadAllCurriculos();
     }
 };
 
@@ -160,6 +161,7 @@ function createdLiRecruiter() {
         const createdTagA = document.createElement('a');
         createdTagA.href = '#recrutador';
         createdTagA.classList.add('links');
+        createdTagA.id = 'recruiterLink';
         createdTagA.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
@@ -170,6 +172,12 @@ function createdLiRecruiter() {
             </svg>
             <p>Todos os Currículos</p>
         `;
+        
+        createdTagA.addEventListener('click', async () => {
+            await loadAllCurriculos();
+            RenderPage();
+        });
+
         recruiterOn.appendChild(createdTagA);
         recruiterOn.classList.remove('hidden');
     }
@@ -204,12 +212,6 @@ if (userId) {
             const linkHref = link.getAttribute('href');
 
             location.hash = linkHref;
-
-            if (!menuList.classList.contains('hidden')) {
-                closeMenuBtn.classList.add('hidden');
-                openMenuBtn.classList.remove('hidden');
-                menuList.classList.add('hidden');
-            }
         })
     });
 
@@ -227,6 +229,12 @@ if (userId) {
         homeContent.classList.add('hidden');
         contentInfo.classList.add('hidden');
         contentRecruiters.classList.add('hidden');
+
+        if (!menuList.classList.contains('hidden')) {
+            closeMenuBtn.classList.add('hidden');
+            openMenuBtn.classList.remove('hidden');
+            menuList.classList.add('hidden');
+        }
 
         switch (hash) {
             case '#home':
@@ -384,7 +392,7 @@ const curriculoList = document.getElementById('curriculoList');
 const curriculoNotFound = document.getElementById('curriculoNotFound');
 const curriculoName = document.getElementById('curriculoName');
 const dateCreated = document.getElementById('dateCreated');
-const curriculoItemTemplate = document.getElementById('curriculoItemTemplate');
+const curriculoItemTemplate = document.querySelector('.content-curriculos #curriculoItemTemplate');
 
 function openRegisterCurriculo() {
     curriculoList.classList.add('hidden');
@@ -661,4 +669,127 @@ function editDataUser() {
                 infoMessage.className = 'error';
             });
     }
+}
+
+
+/* tela dos recrutadores */
+async function loadAllCurriculos() {
+    
+    const recruitersList = document.getElementById('recruitersList');
+    recruitersList.innerHTML = '';
+
+    const template = document.querySelector('.recruiters-list #curriculoItemTemplate');
+    
+    const recusedCurriculos = JSON.parse(localStorage.getItem('recusedCurriculos')) || [];
+
+    try {
+        const response = await fetch('http://localhost:3000/curriculos');
+        const data = await response.json();
+
+        data.forEach(item => {
+            const itemTemplate = template.content.cloneNode(true);
+            const curriculoItem = itemTemplate.querySelector('.curriculo-item');
+
+            const curriculoName = itemTemplate.querySelector('.curriculoName');
+            const curriculoDate = itemTemplate.querySelector('.curriculoDate');
+            const curriculoPretencao = itemTemplate.querySelector('.curriculoPretencao');
+            const recuserBtn = itemTemplate.querySelector('.recuserBtn');
+            const seeDetailsBtn = itemTemplate.querySelector('.seeDetailsCurriculoBtn');
+
+            curriculoName.textContent = `Nome: ${item.name}`;
+            curriculoDate.textContent = `Criado em: ${formatarData(item.created_at.split('T')[0])}`;
+            curriculoPretencao.textContent = `Pretensão salarial: ${parseFloat(item.pretensao_salarial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+
+            if(recusedCurriculos.includes(item.id)) {
+                curriculoItem.classList.add('recused');
+                recuserBtn.textContent = 'Desmarcar';
+            }
+
+            recuserBtn.addEventListener('click', () => {
+                toggleRecused(item.id, curriculoItem, recuserBtn);
+            });
+
+            seeDetailsBtn.addEventListener('click', () => {
+                seeResumeDetails(item);
+            });
+
+            recruitersList.appendChild(itemTemplate);
+        });
+    } catch(err) {
+        console.error('Erro ao carregar currículos:', err);
+        recruitersList.innerHTML = '<p>Erro ao carregar os currículos.</p>';
+    }
+}
+
+/* Recusar/desmarcar currículo */
+function toggleRecused(id, curriculoItem, recuserBtn) {
+    let recusedCurriculos = JSON.parse(localStorage.getItem('recusedCurriculos')) || [];
+
+    if(recusedCurriculos.includes(id)) {
+        recusedCurriculos = recusedCurriculos.filter(itemId => itemId !== id);
+        curriculoItem.classList.remove('recused');
+        recuserBtn.textContent = 'Recusar';
+    } else {
+        recusedCurriculos.push(id);
+        curriculoItem.classList.add('recused');
+        recuserBtn.textContent = 'Desmarcar';
+    }
+
+    localStorage.setItem('recusedCurriculos', JSON.stringify(recusedCurriculos));
+}
+
+/* ver detalhes do currículo */
+function seeResumeDetails(curriculo) {
+    const recruitersContainer = document.querySelector('.recruiters-container');
+    recruitersContainer.classList.add('hidden');
+
+    const curriculoDetalhes = document.getElementById('curriculoDetalhes');
+    const curriculoInfo = document.getElementById('curriculoInfo');
+    const mainInfosHeader = document.getElementById('mainInfosHeader');
+
+    const dataFormated = formatarData(curriculo.dataNasc.split('T')[0]);
+    const salarioFormat = parseFloat(curriculo.pretensao_salarial).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    mainInfosHeader.innerHTML = `
+        <p>Currículo de ${curriculo.name}</p>
+        <p><strong>Data de Criação:</strong> ${formatarData(curriculo.created_at.split('T')[0])}</p>
+    `;  
+
+    curriculoInfo.innerHTML = `
+        <section class="dados-pessoais">
+            <h4>Dados Pessoais</h4>
+            <p><strong>Nome:</strong> ${curriculo.name}</p>
+            <p><strong>Email:</strong> ${curriculo.email}</p>
+            <p><strong>CPF:</strong> ${formatarCPF(curriculo.cpf)}</p>
+            <p><strong>Data de Nascimento:</strong> ${dataFormated}</p>
+            <p><strong>Sexo:</strong> ${curriculo.sexo}</p>
+            <p><strong>Estado Civil:</strong> ${curriculo.estadocivil}</p>
+        </section>
+
+        <section class="formacao">
+            <h4>Formação</h4>
+            <p><strong>Escolaridade:</strong> ${curriculo.escolaridade}</p>
+            <p><strong>Cursos / Especializações:</strong> ${curriculo.cursos}</p>
+        </section>
+
+        <section class="experiencia">
+            <h4>Experiência Profissional</h4>
+            <p>${curriculo.experiencia}</p>
+        </section>
+
+        <section class="pretensao">
+            <h4>Pretensão Salarial</h4>
+            <p>${salarioFormat}</p>
+        </section>
+    `;
+
+    curriculoDetalhes.classList.remove('hidden');
+}
+
+function closeResumeDetails() {
+    const curriculoDetalhes = document.getElementById('curriculoDetalhes');
+    const recruitersContainer = document.querySelector('.recruiters-container');
+
+    recruitersContainer.classList.remove('hidden');
+    curriculoDetalhes.classList.add('hidden');
 }
