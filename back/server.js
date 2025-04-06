@@ -19,7 +19,10 @@ app.get('/users', (req, res) => {
             return res.status(500).send(error);
         }
 
-        res.json(results);
+        res.json({
+            message: 'Usuários cadastrados',
+            users: results
+        });
     })
 });
 
@@ -88,7 +91,10 @@ app.delete('/users/:id', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Usuário deletado',
+            userId: id
+        });
     })
 });
 
@@ -98,7 +104,10 @@ app.get('/users/:id', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Usuário encontrado',
+            user: results[0]
+        });
     })
 });
 
@@ -108,7 +117,10 @@ app.get('/users/:id/curriculos', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Currículos encontrados',
+            curriculos: results
+        });
     })
 })
 
@@ -226,7 +238,10 @@ app.put('/curriculos/:id', (req, res) => {
             if (error) {
                 return res.status(500).send(error);
             }
-            res.json(results);
+            res.json({
+                message: 'Currículo atualizado',
+                curriculoId: id,
+            });
         }
     )
 });
@@ -237,7 +252,10 @@ app.delete('/curriculos/:id', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Currículo deletado',
+            curriculoId: id
+        });
     })
 });
 
@@ -247,7 +265,10 @@ app.get('/curriculos/:id', (req, res) => {
         if (error) {
             return res.status(500).send(error);
         }
-        res.json(results);
+        res.json({
+            message: 'Currículo encontrado',
+            curriculo: results[0]
+        });
     })
 });
 
