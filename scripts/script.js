@@ -463,7 +463,7 @@ async function openUpdateCurriculo() {
             curriculoList.innerHTML = '';
             curriculoList.classList.remove('hidden');
             
-            curriculosData.forEach(item => {
+            curriculos.forEach(item => {
                 const template = curriculoItemTemplate.content.cloneNode(true);
                 const curriculoItem = template.querySelector('.curriculo-item');
                 
