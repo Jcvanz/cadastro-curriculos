@@ -16,7 +16,7 @@ window.onload = () => {
 
     contentLogin.classList.add('hidden');
 
-    if (userData.isrecruiter === 1) {
+    if (userData.isrecruiter) {
         createdLiRecruiter();
         loadAllCurriculos();
     }
@@ -70,7 +70,7 @@ registerForm.addEventListener('submit', async (e) => {
                 registerMessage.textContent = 'Cadastro realizado!';
                 registerMessage.className = 'success';
 
-                if (data.user.isrecruiter === 1) {
+                if (data.user.isrecruiter) {
                     createdLiRecruiter();
                 }
 
@@ -116,14 +116,14 @@ loginForm.addEventListener('submit', async (e) => {
         .then(async (res) => {
             if (res.status === 200) {
                 const data = await res.json();
-
+                
                 localStorage.setItem('user_id', data.user.id);
                 localStorage.setItem('user', JSON.stringify(data.user));
 
                 loginMessage.textContent = 'Login realizado!';
                 loginMessage.className = 'success';
 
-                if (data.user.isrecruiter === 1) {
+                if (data.user.isrecruiter) {
                     createdLiRecruiter();
                 }
 
@@ -155,10 +155,10 @@ function logout() {
 /* Criar o link de recrutador no header */
 function createdLiRecruiter() {
     const recruiterOn = document.getElementById('recruiterOn');
-    const userData = JSON.parse(localStorage.getItem('user'));
 
-    if (userData && userData.isrecruiter === 1) {
+    if (userData && userData.isrecruiter) {
         const createdTagA = document.createElement('a');
+        
         createdTagA.href = '#recrutador';
         createdTagA.classList.add('links');
         createdTagA.id = 'recruiterLink';
@@ -208,7 +208,7 @@ if (userId) {
     linksInternal.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-
+            
             const linkHref = link.getAttribute('href');
 
             location.hash = linkHref;
@@ -345,7 +345,7 @@ curriculoForm.addEventListener('submit', async (e) => {
     const isEditing = curriculoForm.dataset.curriculoId;
     const url = isEditing ? `http://localhost:3000/curriculos/${isEditing}` : 'http://localhost:3000/curriculos';
     const methodRequest = isEditing ? 'PUT' : 'POST';
-
+    
     try {
         const response = await fetch(url, {
             method: methodRequest,
@@ -365,6 +365,7 @@ curriculoForm.addEventListener('submit', async (e) => {
             if (!isEditing) {
                 curriculoForm.reset();
             }
+
             delete curriculoForm.dataset.curriculoId;
 
             setTimeout(() => {
@@ -400,6 +401,7 @@ function openRegisterCurriculo() {
     mainBtn.forEach(btn => {
         btn.classList.add('hidden');
     });
+
     returnBtn.classList.remove('hidden');
 
     updateCurriculoText.classList.add('hidden');
@@ -454,16 +456,17 @@ async function openUpdateCurriculo() {
 
         const curriculosData = await response.json();
 
+        const curriculos = curriculosData.curriculos;
 
-        if (curriculosData.length > 0) {
-
+        if (curriculos.length > 0) {
+            
             curriculoList.innerHTML = '';
             curriculoList.classList.remove('hidden');
             
             curriculosData.forEach(item => {
                 const template = curriculoItemTemplate.content.cloneNode(true);
                 const curriculoItem = template.querySelector('.curriculo-item');
-
+                
                 curriculoItem.classList.remove('hidden');
                 curriculoItem.classList.remove('hidden');
                 curriculoItem.removeAttribute('id');
@@ -574,30 +577,30 @@ deleteAccountConfirm.addEventListener('click', () => {
             'Content-Type': 'application/json'
         }
     })
-        .then((res) => {
-            if (res.status === 200) {
-                msgDelete.classList.remove('hidden');
-                msgDelete.textContent = 'Conta deletada com sucesso!';
-                msgDelete.className = 'success';
+    .then((res) => {
+        if (res.status === 200) {
+            msgDelete.classList.remove('hidden');
+            msgDelete.textContent = 'Conta deletada com sucesso!';
+            msgDelete.className = 'success';
 
-                setTimeout(() => {
-                    deleteAccountModalContent.classList.add('hidden');
-                    closeDeleteAccountModal();
-                    logout();
-                }, 600);
+            setTimeout(() => {
+                deleteAccountModalContent.classList.add('hidden');
+                closeDeleteAccountModal();
+                logout();
+            }, 600);
 
-            } else {
-                msgDelete.classList.remove('hidden');
-                msgDelete.textContent = 'Não foi possível deletar a conta!';
-                msgDelete.className = 'error';
-            }
-        })
-        .catch((err) => {
-            console.error('Erro ao deletar conta:', err);
+        } else {
             msgDelete.classList.remove('hidden');
             msgDelete.textContent = 'Não foi possível deletar a conta!';
             msgDelete.className = 'error';
-        });
+        }
+    })
+    .catch((err) => {
+        console.error('Erro ao deletar conta:', err);
+        msgDelete.classList.remove('hidden');
+        msgDelete.textContent = 'Não foi possível deletar a conta!';
+        msgDelete.className = 'error';
+    });
 });
 
 const inputInfoName = document.getElementById('inputInfoName');
@@ -647,30 +650,35 @@ function editDataUser() {
             },
             body: JSON.stringify(updateDataUser)
         })
-            .then(async (res) => {
-                if (res.status === 200) {
-                    const updatedDataUser = await res.json();
-                    localStorage.setItem('user', JSON.stringify(updatedDataUser));
+        .then(async (res) => {
+            if (res.status === 200) {
+                const updatedDataUser = await res.json();
+                localStorage.setItem('user', JSON.stringify(updatedDataUser));
 
-                    inputInfoName.setAttribute('readonly', true);
-                    inputInfoEmail.setAttribute('readonly', true);
-                    inputInfoPassword.setAttribute('readonly', true);
+                inputInfoName.setAttribute('readonly', true);
+                inputInfoEmail.setAttribute('readonly', true);
+                inputInfoPassword.setAttribute('readonly', true);
 
-                    coolinputs.forEach(input => input.classList.add('inputReadonly'));
-                    updateInfo.textContent = 'Editar Informações';
+                coolinputs.forEach(input => input.classList.add('inputReadonly'));
+                updateInfo.textContent = 'Editar Informações';
 
-                    infoMessage.textContent = 'Dados atualizados com sucesso!';
-                    infoMessage.className = 'success';
-                } else {
-                    infoMessage.textContent = 'Não foi possível atualizar os dados!';
-                    infoMessage.className = 'error';
-                }
-            })
-            .catch((err) => {
-                console.error('Erro ao atualizar dados:', err);
+                infoMessage.textContent = 'Dados atualizados com sucesso!';
+                infoMessage.className = 'success';
+
+                setTimeout(() => {
+                    infoMessage.textContent = '';
+                    infoMessage.className = '';
+                }, 1000);
+            } else {
                 infoMessage.textContent = 'Não foi possível atualizar os dados!';
                 infoMessage.className = 'error';
-            });
+            }
+        })
+        .catch((err) => {
+            console.error('Erro ao atualizar dados:', err);
+            infoMessage.textContent = 'Não foi possível atualizar os dados!';
+            infoMessage.className = 'error';
+        });
     }
 }
 
@@ -689,17 +697,19 @@ async function loadAllCurriculos() {
         const response = await fetch('http://localhost:3000/curriculos');
         const data = await response.json();
 
-        if (!data.length) {
+        const curriculos = data.curriculos;
+
+        if (!curriculos.length) {
             recruitersList.innerHTML = '<p>Nenhum currículo encontrado.</p>';
             return;
         }
 
-        const totalSalarial = data.reduce((acc, curriculo) => {
+        const totalSalarial = curriculos.reduce((acc, curriculo) => {
             return acc + parseFloat(curriculo.pretensao_salarial);
         }, 0);
-        const mediaSalarial = (totalSalarial / data.length);
+        const mediaSalarial = (totalSalarial / curriculos.length);
 
-        data.forEach(item => {
+        curriculos.forEach(item => {
             const itemTemplate = template.content.cloneNode(true);
             const curriculoItem = itemTemplate.querySelector('.curriculo-item');
 
