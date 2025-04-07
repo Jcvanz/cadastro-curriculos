@@ -60,39 +60,39 @@ registerForm.addEventListener('submit', async (e) => {
             isrecruiter: inputRegisterIsRecruiter
         })
     })
-        .then(async (res) => {
-            if (res.status === 200) {
-                const data = await res.json();
+    .then(async (res) => {
+        if (res.status === 200) {
+            const data = await res.json();
 
-                localStorage.setItem('user_id', data.user.id);
-                localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('user_id', data.user.id);
+            localStorage.setItem('user', JSON.stringify(data.user));
 
-                registerMessage.textContent = 'Cadastro realizado!';
-                registerMessage.className = 'success';
+            registerMessage.textContent = 'Cadastro realizado!';
+            registerMessage.className = 'success';
 
-                if (data.user.isrecruiter) {
-                    createdLiRecruiter();
-                }
-
-                setTimeout(() => {
-                    contentLogin.style.display = 'none';
-                }, 700);
-
-            } else {
-                registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
-                registerMessage.className = 'error';
+            if (data.user.isrecruiter) {
+                createdLiRecruiter();
             }
-        })
-        .catch((err) => {
-            console.error('Erro no cadastro:', err);
-            if (err.status === 409) {
-                registerMessage.textContent = 'Email já cadastrado!';
-                registerMessage.className = 'error';
-                return;
-            }
+
+            setTimeout(() => {
+                contentLogin.style.display = 'none';
+            }, 700);
+
+        } else {
             registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
             registerMessage.className = 'error';
-        })
+        }
+    })
+    .catch((err) => {
+        console.error('Erro no cadastro:', err);
+        if (err.status === 409) {
+            registerMessage.textContent = 'Email já cadastrado!';
+            registerMessage.className = 'error';
+            return;
+        }
+        registerMessage.textContent = 'Nao foi possivel realizar o cadastro';
+        registerMessage.className = 'error';
+    })
 })
 
 
@@ -113,34 +113,34 @@ loginForm.addEventListener('submit', async (e) => {
             password: inputPassword
         })
     })
-        .then(async (res) => {
-            if (res.status === 200) {
-                const data = await res.json();
-                
-                localStorage.setItem('user_id', data.user.id);
-                localStorage.setItem('user', JSON.stringify(data.user));
+    .then(async (res) => {
+        if (res.status === 200) {
+            const data = await res.json();
+            
+            localStorage.setItem('user_id', data.user.id);
+            localStorage.setItem('user', JSON.stringify(data.user));
 
-                loginMessage.textContent = 'Login realizado!';
-                loginMessage.className = 'success';
+            loginMessage.textContent = 'Login realizado!';
+            loginMessage.className = 'success';
 
-                if (data.user.isrecruiter) {
-                    createdLiRecruiter();
-                }
-
-                setTimeout(() => {
-                    contentLogin.style.display = 'none';
-                }, 700);
-
-            } else {
-                loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
-                loginMessage.className = 'error';
+            if (data.user.isrecruiter) {
+                createdLiRecruiter();
             }
-        })
-        .catch((err) => {
-            loginMessage.textContent = 'Não foi possivel realizar o login.';
+
+            setTimeout(() => {
+                contentLogin.style.display = 'none';
+            }, 700);
+
+        } else {
+            loginMessage.textContent = 'Login inválido. Verifique suas credenciais.';
             loginMessage.className = 'error';
-            console.error('Erro no login:', err);
-        });
+        }
+    })
+    .catch((err) => {
+        loginMessage.textContent = 'Não foi possivel realizar o login.';
+        loginMessage.className = 'error';
+        console.error('Erro no login:', err);
+    });
 });
 
 
