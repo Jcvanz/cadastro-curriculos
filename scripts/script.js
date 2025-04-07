@@ -16,7 +16,7 @@ window.onload = () => {
 
     contentLogin.classList.add('hidden');
 
-    if (userData.isrecruiter) {
+    if (userData.isrecruiter === 1) {
         createdLiRecruiter();
         loadAllCurriculos();
     }
@@ -123,7 +123,7 @@ loginForm.addEventListener('submit', async (e) => {
             loginMessage.textContent = 'Login realizado!';
             loginMessage.className = 'success';
 
-            if (data.user.isrecruiter) {
+            if (data.user.isrecruiter === 1) {
                 createdLiRecruiter();
             }
 
@@ -156,7 +156,7 @@ function logout() {
 function createdLiRecruiter() {
     const recruiterOn = document.getElementById('recruiterOn');
 
-    if (userData && userData.isrecruiter) {
+    if (userData && userData.isrecruiter === 1) {
         const createdTagA = document.createElement('a');
         
         createdTagA.href = '#recrutador';
