@@ -21,7 +21,7 @@ app.get('/users', (req, res) => {
 
         res.json({
             message: 'Usuários cadastrados',
-            users: results
+            user: results
         });
     })
 });
